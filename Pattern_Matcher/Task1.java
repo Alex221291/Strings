@@ -67,8 +67,9 @@ public class Task {
         ArrayList<String> list = proposals(text);
         for (int i = 0; i < list.size(); i++) {
             ArrayList<String> bufProposal = words(list.get(i));
-            for (int j = 1; j < bufProposal.size(); j++)
-                if (frequencySymbolOfWord(bufProposal.get(j-1), toFind) < frequencySymbolOfWord(bufProposal.get(j), toFind)) {
+            for (int j = 1; j < bufProposal.size(); j++){
+                if ((frequencySymbolOfWord(bufProposal.get(j-1), toFind) < frequencySymbolOfWord(bufProposal.get(j), toFind)) ||
+                        (frequencySymbolOfWord(bufProposal.get(j-1), toFind) == frequencySymbolOfWord(bufProposal.get(j), toFind) && bufProposal.get(j-1).toLowerCase().compareTo(bufProposal.get(j).toLowerCase()) > 0)) {
                     swap(bufProposal, j - 1, j);
                     if (j > 1) {
                         j -= 2;
@@ -76,22 +77,14 @@ public class Task {
                         j--;
                     }
                 }
-            else {
-                if(frequencySymbolOfWord(bufProposal.get(j-1), toFind) == frequencySymbolOfWord(bufProposal.get(j), toFind) && bufProposal.get(j-1).compareTo(bufProposal.get(j)) > 0) {
-                    swap(bufProposal, j - 1, j);
-                    if (j > 1) {
-                        j -= 2;
-                    } else {
-                        j--;
-                    }
-                }
-                }
+            }
             list.set(i, String.join(" ", bufProposal));
         }
         return list;
     }
     public static int frequencySymbolOfWord(String word, char symbol) {
         int count = 0;
+        word.toLowerCase();
         for (int i = 0; i < word.length(); i++) {
             if(word.charAt(i) == symbol) {
                 count++;
